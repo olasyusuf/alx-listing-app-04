@@ -1,5 +1,6 @@
 import BookingForm from "@/components/booking/BookingForm";
 import OrderSummary from "@/components/booking/OrderSummary";
+import CancellationPolicy  from "@/components/booking/CancellationPolicy";
 
 export default function BookingPage() {
   const bookingDetails = {
@@ -15,6 +16,7 @@ export default function BookingPage() {
       <div className="grid grid-cols-2 gap-6">
         <BookingForm />
         <OrderSummary bookingDetails={bookingDetails} />
+        <CancellationPolicy />
       </div>
     </div>
   );
