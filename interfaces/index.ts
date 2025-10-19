@@ -14,7 +14,6 @@ export interface ButtonProps {
   className?: string;
 }
 
-// interfaces/index.ts
 export interface PropertyProps {
   name: string;
   address: {
