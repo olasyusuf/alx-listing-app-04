@@ -11,14 +11,14 @@ import axios from 'axios';
 
 const HomePage: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState<string>("");
-  const [properties, setProperties] = useState([]);
+  const [properties, setProperties] = useState<PropertyProps[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchProperties = async () => {
       try {
-        const response = await axios.get("/api/properties");
+        const response = await axios.get<PropertyProps[]>("/api/properties");
         setProperties(response.data);
       } catch (error) {
         setError("Failed to load properties. Please try again later.");

@@ -1,15 +1,16 @@
-import { PROPERTYLISTINGSAMPLE } from "@/constants";
-import { useRouter } from "next/router";
-import axios from "axios";
-import { useState, useEffect } from "react";
 import PropertyDetail from "@/components/property/PropertyDetail";
 import BookingSection from "@/components/property/BookingSection";
 import ReviewSection from "@/components/property/ReviewSection";
+import { useRouter } from "next/router";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 export default function PropertyPage() {
   const router = useRouter();
   const { id } = router.query;
-  const [property, setProperty] = useState(null);
+  type Property = any;
+
+  const [property, setProperty] = useState<Property | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
