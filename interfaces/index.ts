@@ -42,3 +42,12 @@ export interface PropertyProps {
   }[]
 }
 
+export interface BookingPageProps {
+  bookingDetails: {
+    propertyName: string;
+    guestName: string;
+    checkInDate: string;
+    checkOutDate: string;
+    rooms: number;
+  };
+}

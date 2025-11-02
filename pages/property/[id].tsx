@@ -53,7 +53,7 @@ export default function PropertyPage() {
           <PropertyDetail property={property} />
 
           {/* Reviews Section */}
-          <ReviewSection reviews={property.reviews} />
+          <ReviewSection propertyId={property.id} />
         </div>
 
         {/* Right column (Booking Section) */}
