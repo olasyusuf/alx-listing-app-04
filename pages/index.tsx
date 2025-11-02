@@ -1,14 +1,39 @@
-import React, { useState } from "react";
+'use client';
+
+import React, { useState, useEffect } from "react";
 import { HERO_BACKGROUND } from "@/constants/images";
 import { FILTERS } from "@/constants/filters";
 import { PROPERTYLISTINGSAMPLE } from "@/constants";
 import { PropertyProps } from "@/interfaces";
 import Pill from "@/components/common/Pill";
 import PropertyCard from "@/components/common/PropertyCard";
+import axios from 'axios';
+
 
 const HomePage: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState<string>("");
+  const [properties, setProperties] = useState([]);
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    const fetchProperties = async () => {
+      try {
+        const response = await axios.get("/api/properties");
+        setProperties(response.data);
+      } catch (error) {
+        console.error("Error fetching properties:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProperties();
+  }, []);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+  
   // Filter properties based on selected pill
   const filteredProperties: PropertyProps[] = activeFilter
     ? PROPERTYLISTINGSAMPLE.filter((property) =>
@@ -62,6 +87,11 @@ const HomePage: React.FC = () => {
         <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {filteredProperties.map((property, index) => (
             <PropertyCard key={index} property={property} />
+          ))}
+        </div>
+        <div className="grid grid-cols-3 gap-4">
+          {properties.map((property) => (
+            <PropertyCard key={property.id} property={property} />
           ))}
         </div>
       </section>
