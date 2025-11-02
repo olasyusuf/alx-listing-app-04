@@ -17,16 +17,10 @@ const BookingForm: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  interface BookingFormData {
-    firstName: string;
-    lastName: string;
-    email: string;
-    phoneNumber: string;
-    cardNumber: string;
-    expirationDate: string;
-    cvv: string;
-    billingAddress: string;
-  }
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
