@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from "react";
 import { HERO_BACKGROUND } from "@/constants/images";
 import { FILTERS } from "@/constants/filters";
-import { PROPERTYLISTINGSAMPLE } from "@/constants";
 import { PropertyProps } from "@/interfaces";
 import Pill from "@/components/common/Pill";
 import PropertyCard from "@/components/common/PropertyCard";
@@ -14,6 +13,7 @@ const HomePage: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState<string>("");
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchProperties = async () => {
@@ -21,6 +21,7 @@ const HomePage: React.FC = () => {
         const response = await axios.get("/api/properties");
         setProperties(response.data);
       } catch (error) {
+        setError("Failed to load properties. Please try again later.");
         console.error("Error fetching properties:", error);
       } finally {
         setLoading(false);
@@ -33,13 +34,22 @@ const HomePage: React.FC = () => {
   if (loading) {
     return <p>Loading...</p>;
   }
+
+  if (error) {
+    // Display the error state
+    return <div className="text-red-600 text-xl p-8 text-center border border-red-300 bg-red-50 rounded-lg">{error}</div>;
+  }
+  
+  if (properties.length === 0) {
+    return <p className="text-xl p-8 text-center text-gray-500">No properties found. Try checking your API connection!</p>;
+  }
   
   // Filter properties based on selected pill
   const filteredProperties: PropertyProps[] = activeFilter
-    ? PROPERTYLISTINGSAMPLE.filter((property) =>
+    ? properties.filter((property) =>
         property.category.includes(activeFilter)
       )
-    : PROPERTYLISTINGSAMPLE;
+    : properties;
 
   return (
     <>

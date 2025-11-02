@@ -15,7 +15,7 @@ export interface ButtonProps {
 }
 
 export interface PropertyProps {
-  id: string;
+  id: number;
   name: string;
   address: {
     state: string;
@@ -31,6 +31,14 @@ export interface PropertyProps {
     occupants: string;
   };
   image: string;
+  images?: string[];
   discount?: string;
+  description: string;
+  reviews: {
+    name: string;
+    avatar: string;
+    rating: number;
+    comment: string;
+  }[]
 }
 

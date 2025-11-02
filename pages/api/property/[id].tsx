@@ -1,0 +1,67 @@
+import { PROPERTYLISTINGSAMPLE } from "@/constants";
+import { useRouter } from "next/router";
+import axios from "axios";
+import { useState, useEffect } from "react";
+import PropertyDetail from "@/components/property/PropertyDetail";
+import BookingSection from "@/components/property/BookingSection";
+import ReviewSection from "@/components/property/ReviewSection";
+
+export default function PropertyPage() {
+  const router = useRouter();
+  const { id } = router.query;
+  const [property, setProperty] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!id) return;
+
+    const fetchProperty = async () => {
+      try {
+        const response = await axios.get(`/api/properties/${id}`);
+        setProperty(response.data);
+      } catch (error) {
+        setError("Failed to load property details. Please try again later.");
+        console.error("Error fetching property:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProperty();
+  }, [id]);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p className="text-red-500">{error}</p>;
+
+  if (!property) return <p className="text-center mt-10 text-gray-500">Property not found</p>;
+
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <button
+      onClick={() => router.back()}
+      className="text-blue-600 hover:underline mb-4"
+    >
+      ← Back to Listings
+    </button>
+
+      {/* Property Detail Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Left column (Details + Reviews) */}
+        <div className="lg:col-span-2">
+          <PropertyDetail property={property} />
+
+          {/* Reviews Section */}
+          <ReviewSection reviews={property.reviews} />
+        </div>
+
+        {/* Right column (Booking Section) */}
+        <div className="lg:col-span-1">
+          <div className="sticky top-8">
+            <BookingSection price={property.price} />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
